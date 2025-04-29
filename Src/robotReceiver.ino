@@ -41,6 +41,11 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   Serial.println(inputValuesString); 
   lastRecvTime = millis(); 
 }
+void stop()
+{
+ dacWrite(speedPin, 126);
+ dacWrite(steerPin, 126);
+}
 
 void setup() 
 {
@@ -57,6 +62,7 @@ void setup()
 
   esp_now_register_recv_cb(OnDataRecv);
   previousTime2=millis();
+  stop();
 }
  
 
@@ -101,7 +107,7 @@ void loop()
  //Check Signal lost.
  unsigned long now = millis();
  if ( now - lastRecvTime > SIGNAL_TIMEOUT ) 
-  {
+  { stop();
     Serial.println("No Signal");  
   }
   
